@@ -5,6 +5,8 @@ defaults:
   - job
   - dataset: 2d #celeba, 2d, stackedmnist
   - model: Basic #Basic, UNET
+  - override hydra/launcher: submitit_slurm
+  - _self_
   
 
 # data
@@ -31,3 +33,17 @@ sample_checkpoint_b: ""
 checkpoint_f: ""
 checkpoint_b: ""
 
+hydra:
+  launcher:
+    partition: long
+    cpus_per_task: 4
+    mem_gb: 10
+    gres: gpu:1
+    timeout_min: 600
+    additional_parameters:
+      mail-user: alexander.tong@mila.quebec
+      mail-type: END,FAIL
+    setup: 
+      - "module purge"
+      - "module load miniconda/3 pytorch/1.8.1"
+      - "conda activate bridge_test"

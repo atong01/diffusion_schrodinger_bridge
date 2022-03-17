@@ -2,6 +2,7 @@
 from pytorch_lightning.loggers import NeptuneLogger as _NeptuneLogger
 
 from pytorch_lightning.loggers import CSVLogger as _CSVLogger
+from pytorch_lightning.loggers import WandbLogger as _WandbLogger
 
 
 class Logger:
@@ -41,6 +42,17 @@ class NeptuneLogger(Logger):
     def __init__(self, project_name, api_key, save_folder='./'):
         self.directory = save_folder
         self.logger = _NeptuneLogger(api_key=api_key, project_name=project_name)
+
+    def log_metrics(self, metrics, step=None):
+        self.logger.log_metrics(metrics,step=step)
+
+    def log_hparams(self, hparams_dict):
+        self.logger.log_hyperparams(hparams_dict)
+
+class WandbLogger(Logger):
+    def __init__(self, project_name, api_key, save_folder='./'):
+        self.directory = save_folder
+        self.logger = _WandbLogger(api_key=api_key, project_name=project_name)
 
     def log_metrics(self, metrics, step=None):
         self.logger.log_metrics(metrics,step=step)
